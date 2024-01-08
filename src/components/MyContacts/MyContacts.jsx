@@ -20,12 +20,12 @@ class MyContacts extends Component {
     isDublicate({ name, number }) {
         const { contacts } = this.state;
         const normalizedName = name.toLowerCase();
-        const normalizedNumber = number.toLowerCase();
+        const normalizedNumber = number.trim();
         
         const dublicate = contacts.find(item => {
             const normalizeCurrentName = item.name.toLowerCase();
-            const normalizeCurrentNumber = item.number.toLowerCase();
-            return (normalizeCurrentName === normalizedName &&  normalizeCurrentNumber === normalizedNumber)
+            const normalizeCurrentNumber = item.number.trim();
+            return (normalizeCurrentName === normalizedName ||  normalizeCurrentNumber === normalizedNumber)
         })
 
         return Boolean(dublicate);
@@ -34,8 +34,9 @@ class MyContacts extends Component {
     addContact = (data) => {
         
         if (this.isDublicate(data)) { 
-            return alert(`${data.name} is already in contacts.`)
+            return alert(`${data.name} or Number: ${data.number} is already in contacts.`)
         }
+        
 
         this.setState(({ contacts }) => {
             const newContact = {
@@ -73,10 +74,10 @@ class MyContacts extends Component {
 
         const normalizedFilter = filter.toLowerCase();
 
-        const filteredContacts = contacts.filter(({name}) => { 
+        const filteredContacts = contacts.filter(({name, number}) => { 
             const normalizedName = name.toLowerCase();
 
-            return (normalizedName.includes(normalizedFilter))
+            return (normalizedName.includes(normalizedFilter) || number.includes(normalizedFilter))
         })
 
         return filteredContacts;
